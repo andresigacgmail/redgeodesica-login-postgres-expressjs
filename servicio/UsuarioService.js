@@ -1,58 +1,66 @@
-const db = require('./../conexion/Conexion');
+const usuarioRepositorio = require('./../repositorio/UsuarioRepositorio');
+const authService = require('./AuthService');
 
 
 
-const obtenerUsuario = async (id) => {
-    try {
-        return await db.one("select * from usuario where t_id = $1",[id]);       
-    } catch (error) {
-        console.log(error.message)
-    }
+
+
+const obtenerUsuario = async (id) => {        
+    return await usuarioRepositorio.obtenerUsuario(id);
 }
 
 const obtenerUsuarios = async () => {    
-   //console.log( await db.any("select * from usuario where t_id = $1", [30]) ) 
-   try {
-        return await db.any("select * from usuario",[]);       
-   } catch (error) {
-    console.log(error)
-   }    
-    return await db.any("select * from usuario",[]);       
+  return await usuarioRepositorio.obtenerUsuarios();
 }
 
 
 const guardarUsuarios = async (usuario) => {
-    console.log(usuario)
-    try {
-        return await db.one(`insert into usuario (usuario, tipo_documento, numero_documento, nombre, correo_electronico, telefono, numero_contrato, cargo, contrasenia, fecha_creacion, fecha_vencimiento, rol, agencia) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) returning *`, [usuario.usuario, usuario.tipo_documento, usuario.numero_documento, usuario.nombre, usuario.correo_electronico, usuario.telefono, usuario.numero_contrato, usuario.cargo, usuario.contrasenia, usuario.fecha_creacion, usuario.fecha_vencimiento, usuario.rol, usuario.agencia]);        
-    } catch (error) {
-        console.log(error)
-    }
+
+    const usuarioEmail = await usuarioRepositorio.buscarUsuarioPorEmail(usuario.correo_electronico);;
+    if(usuarioEmail != null){
+        return ({message: "ya existe el correo"});
+    }   
+    
+    const contrasenia = await authService.passwordBcript(usuario.contrasenia);
+
+    usuario.contrasenia = contrasenia;
+    usuario.agencia = 7;
+    usuario.rol = 3;
+
+    return await usuarioRepositorio.guardarUsuarios(usuario);
 }
 
 
 const actualizarUsuario = async (usuario, id) => {
-    console.log(usuario, id)
-    try {
-        return await db.one(`update usuario set usuario = $1, tipo_documento = $2, numero_documento = $3, nombre = $4, correo_electronico = $5, telefono = $6, numero_contrato = $7, cargo = $8, fecha_creacion = $9, fecha_vencimiento = $10 where t_id = ${id} returning *`,[usuario.usuario,usuario.tipo_documento,usuario.numero_documento,usuario.nombre,usuario.correo_electronico,usuario.telefono,usuario.numero_contrato,usuario.cargo,usuario.fecha_creacion,usuario.fecha_vencimiento]);        
-    } catch (error) {
-        console.log(error)
-    }
+    return await usuarioRepositorio.actualizarUsuario(usuario, id);
 }
 
 const eliminarUsuario = async (id) => {
-    try {
-        return await db.none(`delete from usuario where t_id = ${id}`);
-    } catch (error) {
-        console.log(error)
-    }
+    return await usuarioRepositorio.eliminarUsuario(id);
 }
 
+
+const login = async (usuario) => {
+    const usuarioEmail = await usuarioRepositorio.buscarUsuarioPorEmail(usuario.correo_electronico);
+    if(usuarioEmail == null){
+        return ({message: "no existe el correo"});
+    }   
+
+    const contrasenia = await authService.validarContrasenia(usuarioEmail.contrasenia, usuario.contrasenia);
+    if(!contrasenia){
+        return ({message: "datos incorrectos"});
+    }   
+    console.log(contrasenia);
+    return {
+        token:authService.generarToken(usuarioEmail),
+        usuario:usuarioEmail.usuario
+    };
+}
 
 
 
 
 
 module.exports = {
-    obtenerUsuarios, guardarUsuarios, obtenerUsuario, actualizarUsuario, eliminarUsuario
+    obtenerUsuarios, guardarUsuarios, obtenerUsuario, actualizarUsuario, eliminarUsuario, login
 }
