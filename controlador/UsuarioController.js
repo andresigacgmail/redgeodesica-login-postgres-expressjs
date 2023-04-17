@@ -1,17 +1,21 @@
 const usuarioService = require('./../servicio/UsuarioService');
+const mail = require('./../utilidades/Mail');
 
 
 
 const listaUsuarios = async (req, res) => {
-    console.log(req.protocol)     // "https"
-    console.log(req.hostname)     // "example.com"
-    console.log(req.path)         // "/creatures"
-    console.log(req.originalUrl)  // "/creatures?filter=sharks"
-    console.log(req.subdomains)   // "['ocean']"
+    // console.log(req.protocol)     // "https"
+    // console.log(req.hostname)     // "example.com"
+    // console.log(req.path)         // "/creatures"
+    // console.log(req.originalUrl)  // "/creatures?filter=sharks"
+    // console.log(req.subdomains)   // "['ocean']"
 
-    console.log( req.header('Content-Type') ) // "application/json"
-    console.log( req.header('user-agent') )    // "Mozilla/5.0 (Macintosh Intel Mac OS X 10_8_5) AppleWebKi..."
-    console.log( req.header('Authorization') )
+    // console.log( req.header('Content-Type') ) // "application/json"
+    // console.log( req.header('user-agent') )    // "Mozilla/5.0 (Macintosh Intel Mac OS X 10_8_5) AppleWebKi..."
+    // console.log( req.header('Authorization') )
+
+
+    //mail.enviarEmail();
 
     res.status(200).json(await usuarioService.obtenerUsuarios());
 }
@@ -36,6 +40,16 @@ const login = async (req, res) => {
     return res.status(200).json(await usuarioService.login(req.body));
 }
 
+const logout = async (req, res) => {}
+
+const reestablecerPassword = async (req, res) => {
+    return res.status(200).json(await usuarioService.reestablecerPassword(req.body, req.header('token')));
+}
+
+const recuperarPassword = async (req, res) => {
+    return res.status(200).json(await usuarioService.recuperarPassword(req.body));
+}
+
 module.exports = {
-    listaUsuarios, registrarUsuario, obtenerUsuario, actualizarUsuario, eliminarUsuario, login
+    listaUsuarios, registrarUsuario, obtenerUsuario, actualizarUsuario, eliminarUsuario, login, logout, reestablecerPassword, recuperarPassword
 }

@@ -1,4 +1,3 @@
-const usuarioRepositorio = require('./../repositorio/UsuarioRepositorio');
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 
@@ -15,14 +14,31 @@ const generarToken = (usuario) => {
         t_id: usuario.t_id,
         correo_electronico: usuario.correo_electronico,        
         usuario: usuario.usuario
-    }, 'Igac2023*.');
+    }, process.env.SECRET);
+}
+
+
+const TokenRecuperarPassword = (usuario) => {    
+    return jsonwebtoken.sign({
+        t_id: usuario.t_id,
+        correo_electronico: usuario.correo_electronico,        
+        usuario: usuario.usuario
+    }, process.env.SECRET, {expiresIn: 1200});
+}
+
+const obtenerUsuariPorToken = (token) => {
+    
+    try {        
+        return jsonwebtoken.verify(token, process.env.SECRET);       
+    } catch (error) {
+        console.error(error);        
+    }
 }
 
 
 
 
 
-
 module.exports = {
-    passwordBcript, validarContrasenia, generarToken
+    passwordBcript, validarContrasenia, generarToken, TokenRecuperarPassword, obtenerUsuariPorToken
 }

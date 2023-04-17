@@ -1,5 +1,6 @@
 const usuarioRepositorio = require('./../repositorio/UsuarioRepositorio');
 const authService = require('./AuthService');
+const mail = require('./../utilidades/Mail');
 
 
 
@@ -57,10 +58,19 @@ const login = async (usuario) => {
     };
 }
 
+const recuperarPassword = async (correo) => {
+    const usuario = await usuarioRepositorio.buscarUsuarioPorEmail(correo.email);        
+    mail.enviarEmail(correo.email, 'Reestablecer Contraseña', authService.TokenRecuperarPassword(usuario));
+}
+
+const reestablecerPassword = (password, token) => {
+    const usuario = authService.obtenerUsuariPorToken(token);    
+    //console.log(password, token);
+}
 
 
 
 
 module.exports = {
-    obtenerUsuarios, guardarUsuarios, obtenerUsuario, actualizarUsuario, eliminarUsuario, login
+    obtenerUsuarios, guardarUsuarios, obtenerUsuario, actualizarUsuario, eliminarUsuario, login, reestablecerPassword, recuperarPassword
 }
