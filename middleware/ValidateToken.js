@@ -10,7 +10,7 @@ const validarToken = (req, res, next) => {
         req.user = jsonWebToken.verify(token, process.env.SECRET);
         next();
     } catch (error) {
-        console.error(error);
+        console.error(error.message, error.expiredAt);
         return res.status(401).json({ message: 'Token no valido' });
     }
 }

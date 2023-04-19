@@ -18,7 +18,8 @@ const enviarEmail = (correo, asunto, texto) => {
         to: correo,
         subject: asunto,
         //text: texto,        
-        html:"<p>Link para entrar a la página de microlab: <br> <a href='https://redgeodesica.igac.gov.co/recuperarContrasenia.html?token="+texto+"'>asdf</a></p>"
+        //html:"<p>Has click en el link para restablecer la contraseña, si no la has solicitado, has caso omiso a este correo. <br> <a href='https://redgeodesica.igac.gov.co/recuperarContrasenia.html?token="+texto+"'>Restablecer Contraseña</a></p>"
+        html:texto
     };
 
     try {

@@ -21,7 +21,19 @@ const listaUsuarios = async (req, res) => {
 }
 
 const registrarUsuario = async (req, res) => {
-   return res.status(201).json(await usuarioService.guardarUsuarios(req.body));
+    const result = await usuarioService.guardarUsuarios(req.body);
+    if(result.status){
+        return res.status(201).json({
+            status: result.status,
+            message: result.message
+        });
+    }
+
+    return res.status(400).json({
+        status: result.status,
+        message: result.message,        
+    });
+   
 }
 
 const obtenerUsuario = async (req, res) => {

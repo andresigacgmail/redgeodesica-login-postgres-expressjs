@@ -6,7 +6,7 @@ const usuarioController = require('./../controlador/UsuarioController');
 const ciudadController = require('./../controlador/CiudadController');
 
 router.get('/usuario', validarToken, usuarioController.listaUsuarios);
-router.post('/usuario', validarToken, usuarioController.registrarUsuario);
+router.post('/usuario', usuarioController.registrarUsuario);
 router.get('/usuario/:id', usuarioController.obtenerUsuario);
 router.put('/usuario/:id', validarToken, usuarioController.actualizarUsuario);
 router.delete('/usuario/:id', validarToken, usuarioController.eliminarUsuario);
