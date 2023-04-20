@@ -85,7 +85,7 @@ const login = async (usuario) => {
     console.log(contrasenia);
     return {
         token:authService.generarToken(usuarioEmail),
-        usuario:usuarioEmail.usuario
+        usuario:usuarioEmail
     };
 }
 
