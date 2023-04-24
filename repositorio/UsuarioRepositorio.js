@@ -61,7 +61,8 @@ const buscarUsuarioPorEmail = async (email) => {
 
 const actualizarPassword = async (id, password) => {
     try {
-        return await db.none(`update usuario set contrasenia = $1 where t_id = $2`,[password, id]);
+        await db.none(`update usuario set contrasenia = $1 where t_id = $2`,[password, id]);
+        return true;
     } catch (error) {
         console.log(error)
     }

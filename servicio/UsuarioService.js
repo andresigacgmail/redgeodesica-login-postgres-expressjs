@@ -75,30 +75,44 @@ const eliminarUsuario = async (id) => {
 const login = async (usuario) => {
     const usuarioEmail = await usuarioRepositorio.buscarUsuarioPorEmail(usuario.correo_electronico);
     if(usuarioEmail == null){
-        return ({message: "no existe el correo"});
+        return ({
+            status: false,
+            message: "no existe el correo"
+        });
     }   
 
     const contrasenia = await authService.validarContrasenia(usuarioEmail.contrasenia, usuario.contrasenia);
     if(!contrasenia){
-        return ({message: "datos incorrectos"});
+        return ({
+            status: false,
+            message: "datos incorrectos"});
     }   
     console.log(contrasenia);
     return {
+        status: true,
         token:authService.generarToken(usuarioEmail),
         usuario:usuarioEmail
     };
 }
 
 const recuperarPassword = async (correo) => {
-    const usuario = await usuarioRepositorio.buscarUsuarioPorEmail(correo.email);        
-    texto = "<img src="+'"https://raw.githubusercontent.com/dhbello/Centro-de-Control/main/images/nav/logo.png"'+"></img>   <p>Has click en el link para restablecer la contraseña, si no la has solicitado, has caso omiso a este correo. <br> <a href='https://redgeodesica.igac.gov.co/recuperarContrasenia.html?token="+authService.TokenRecuperarPassword(usuario)+"'>Restablecer Contraseña</a></p>";
-    mail.enviarEmail(correo.email, 'Reestablecer Contraseña', texto);
+    try {
+        const usuario = await usuarioRepositorio.buscarUsuarioPorEmail(correo.email);        
+        texto = "<img src="+'"https://raw.githubusercontent.com/dhbello/Centro-de-Control/main/images/nav/logo.png"'+"></img>   <p>Has click en el link para restablecer la contraseña, si no la has solicitado, has caso omiso a este correo. <br> <a href='"+correo.origin+"/herramientas/auth/recuperarContrasenia.html?token="+authService.TokenRecuperarPassword(usuario)+"'>Restablecer Contraseña</a></p>";
+        mail.enviarEmail(correo.email, 'Reestablecer Contraseña', texto);        
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const reestablecerPassword = async (password, token) => {
-    const usuario = authService.obtenerUsuariPorToken(token);    
-    usuario.contrasenia = await authService.passwordBcript(password.contrasenia);
-    return await usuarioRepositorio.actualizarPassword(usuario.t_id, usuario.contrasenia);   
+    try {
+        const usuario = authService.obtenerUsuariPorToken(token);    
+        usuario.contrasenia = await authService.passwordBcript(password.contrasenia);
+        return await usuarioRepositorio.actualizarPassword(usuario.t_id, usuario.contrasenia);           
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 
