@@ -59,7 +59,8 @@ const reestablecerPassword = async (req, res) => {
 }
 
 const recuperarPassword = async (req, res) => {
-    return res.status(200).json(await usuarioService.recuperarPassword(req.body));
+    return res.status(200).json({
+        status: await usuarioService.recuperarPassword(req.body)})        
 }
 
 module.exports = {

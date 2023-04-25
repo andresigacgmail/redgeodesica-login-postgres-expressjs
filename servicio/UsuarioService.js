@@ -16,7 +16,7 @@ const obtenerUsuarios = async () => {
 
 
 const guardarUsuarios = async (usuario) => {
-    console.log(usuario)
+
 
     try {
         
@@ -99,9 +99,11 @@ const recuperarPassword = async (correo) => {
     try {
         const usuario = await usuarioRepositorio.buscarUsuarioPorEmail(correo.email);        
         texto = "<img src="+'"https://raw.githubusercontent.com/dhbello/Centro-de-Control/main/images/nav/logo.png"'+"></img>   <p>Has click en el link para restablecer la contraseña, si no la has solicitado, has caso omiso a este correo. <br> <a href='"+correo.origin+"/herramientas/auth/recuperarContrasenia.html?token="+authService.TokenRecuperarPassword(usuario)+"'>Restablecer Contraseña</a></p>";
-        mail.enviarEmail(correo.email, 'Reestablecer Contraseña', texto);        
+        mail.enviarEmail(correo.email, 'Reestablecer Contraseña', texto);   
+        return true;     
     } catch (error) {
         console.log(error);
+        return false;
     }
 }
 
