@@ -32,7 +32,7 @@ const guardarUsuarios = async (usuario) => {
         const contrasenia = await authService.passwordBcript(usuario.contrasenia);
     
         usuario.contrasenia = contrasenia;
-        usuario.agencia = 9;
+        usuario.agencia = 7;
         usuario.rol = 3;
 
         const usuarioGuardado = await usuarioRepositorio.guardarUsuarios(usuario);
