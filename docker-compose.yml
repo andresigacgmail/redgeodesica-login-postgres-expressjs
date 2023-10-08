@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    image: auth-pasiva:v1.0
+    # environment:
+    #   POSTGRES_DB: mydb
+    #   POSTGRES_USER: myuser
+    #   POSTGRES_PASSWORD: mypassword
+    volumes:
+      - /etc/letsencrypt/live/auth.homeristicodeath.tech/fullchain.pem:/etc/letsencrypt/live/auth.homeristicodeath.tech/fullchain.pem
+      - /etc/letsencrypt/live/auth.homeristicodeath.tech/privkey.pem:/etc/letsencrypt/live/auth.homeristicodeath.tech/privkey.pem
+    ports:
+      - "3001:3001"
+  
