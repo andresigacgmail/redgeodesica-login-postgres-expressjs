@@ -8,8 +8,11 @@ app.use(express.json());
 
 
 const usuarioRoutes = require('./routes/UsuarioRoutes');
+const pasivaRoutes = require('./routes/PasivaRoutes');
+
 
 app.use('/api', usuarioRoutes);
+app.use('/api/', pasivaRoutes);
 
 
 
