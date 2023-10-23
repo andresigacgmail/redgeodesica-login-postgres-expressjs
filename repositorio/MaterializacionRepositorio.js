@@ -12,7 +12,18 @@ const accesoGeneralPorEstacion = async (estacion) => {
     }
 }
 
+const ondulacionEstacion = async (nomenclatura) => { 
+
+    //let intEstacon = parseInt(estacion);
+    try {
+        return await db.one(`select * from main_estacion where nomenclatura = $1`,[nomenclatura]);
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
 
 module.exports = {
-    accesoGeneralPorEstacion
+    accesoGeneralPorEstacion, ondulacionEstacion
 }
