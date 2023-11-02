@@ -4,7 +4,7 @@ const accesoGeneralPorEstacion = async (estacion) => {
     let intEstacon = parseInt(estacion);
     try {
         return await db.one(`select me.t_id as estacion_id, identificador, ma.acceso_general, ma.descripción_detallada, 
-                            ve.nombre as vereda from main_estacion me left join materializacion ma on me.t_id = ma.estacion 
+                            ve.nombre as vereda, ma.observacion from main_estacion me left join materializacion ma on me.t_id = ma.estacion 
                             left join veredas ve on me.vereda = ve.codigo where me.t_id = $1`,[intEstacon]);
     } catch (error) {
         console.log(error);
