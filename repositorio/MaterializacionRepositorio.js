@@ -26,6 +26,34 @@ const ondulacionEstacion = async (nomenclatura) => {
 }
 
 
+const departamentosFindAll = async () => {
+    try {
+        return await db.many(`select * from departamento`,[]);
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+const municipioFindAll = async () => {
+    try {
+        return await db.many(`select * from municipio`,[]);
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+const veredasFindAll = async () => {
+    try {
+        return await db.many(`select * from veredas`,[]);
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+
 module.exports = {
-    accesoGeneralPorEstacion, ondulacionEstacion
+    accesoGeneralPorEstacion, ondulacionEstacion, departamentosFindAll, municipioFindAll, veredasFindAll
 }

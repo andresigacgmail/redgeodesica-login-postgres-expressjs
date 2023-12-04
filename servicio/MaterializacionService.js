@@ -9,6 +9,18 @@ const obtenerOndulacion = async (nomenclatura) => {
     return await materializacionRepositorio.ondulacionEstacion(nomenclatura);
 }
 
+const departamentos = async () => {    
+    return await materializacionRepositorio.departamentosFindAll();
+}
+
+const municipios = async () => {    
+    return await materializacionRepositorio.municipioFindAll();
+}
+
+const veredas = async () => {    
+    return await materializacionRepositorio.veredasFindAll();
+}
+
 module.exports = {
-    obtenerAccesoGeneral, obtenerOndulacion
+    obtenerAccesoGeneral, obtenerOndulacion, departamentos, municipios, veredas
 }
